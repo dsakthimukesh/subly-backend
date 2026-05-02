@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { ApiKeyRequest } from "../middleware/apiKey.middleware";
 import { getCustomerSubscriptionService } from "../service/external.service";
+import { AppError } from "../utils/AppError";
 
 export const getCustomerSubscription = async (
   req: ApiKeyRequest,
@@ -21,6 +22,9 @@ export const getCustomerSubscription = async (
 
     return res.status(200).json(result);
   } catch (error: any) {
+    if (error instanceof AppError) {
+      return res.status(error.statusCode).json({ message: error.message });
+    }
     return res.status(500).json({ message: error.message });
   }
 };

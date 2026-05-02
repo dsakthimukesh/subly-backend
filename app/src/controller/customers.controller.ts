@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AuthRequest } from "../middleware/auth.middleware";
 import { createCustomerService, getCustomersService } from "../service/customers.service";
 import { CreateCustomerRequest } from "../interface/customer.interface";
+import { AppError } from "../utils/AppError";
 
 export const getCustomers = async (req: AuthRequest, res: Response) => {
     try {
@@ -15,6 +16,9 @@ export const getCustomers = async (req: AuthRequest, res: Response) => {
 
         return res.status(200).json(customers);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };
@@ -40,6 +44,9 @@ export const createCustomer = async (
 
         return res.status(200).json(result);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };

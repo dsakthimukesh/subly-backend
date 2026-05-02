@@ -8,6 +8,7 @@ import {
 import { pool } from "../config/db";
 import { getSubscriptionsByCompany } from "../repository/subscriptions.repository";
 import { CreateSubscriptionRequest } from "../interface/subscriptions.interface";
+import { AppError } from "../utils/AppError";
 
 export const createSubscriptionService = async (
     company_id: number,
@@ -26,7 +27,7 @@ export const createSubscriptionService = async (
     const plan = await getPlanDetails(plan_id)
 
     if (!plan) {
-        throw new Error("Plan not found");
+        throw new AppError("Plan not found");
     }
 
     // 3. Calculate dates

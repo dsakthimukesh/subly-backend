@@ -1,5 +1,6 @@
 import { getCustomersByCompany, findCustomerByEmail, createCustomer, } from "../repository/customers.repository";
 import { CreateCustomerRequest, CreateCustomerResponse } from "../interface/customer.interface";
+import { AppError } from "../utils/AppError";
 
 export const getCustomersService = async (company_id: number) => {
     const customers = await getCustomersByCompany(company_id);
@@ -18,7 +19,7 @@ export const createCustomerService = async (
     const existing = await findCustomerByEmail(company_id, email);
 
     if (existing) {
-        throw new Error("Customer already exists");
+        throw new AppError("Customer already exists");
     }
 
     const result = await createCustomer({

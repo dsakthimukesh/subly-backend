@@ -4,6 +4,7 @@ import {
     getInvoicesService,
     payInvoiceService,
 } from "../service/invoices.service";
+import { AppError } from "../utils/AppError";
 
 export const getInvoices = async (req: AuthRequest, res: Response) => {
     try {
@@ -17,6 +18,9 @@ export const getInvoices = async (req: AuthRequest, res: Response) => {
 
         return res.status(200).json(invoices);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };
@@ -33,6 +37,9 @@ export const payInvoice = async (req: AuthRequest, res: Response) => {
 
         return res.status(200).json(result);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };

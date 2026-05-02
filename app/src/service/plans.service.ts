@@ -4,6 +4,7 @@ import {
     getPlansByCompany,
 } from "../repository/plans.repository";
 import { CreatePlanRequest } from "../interface/plans.interface";
+import { AppError } from "../utils/AppError";
 
 export const createPlanService = async (
     company_id: number,
@@ -14,7 +15,7 @@ export const createPlanService = async (
     const existing = await findPlanByName(company_id, plan_name);
 
     if (existing) {
-        throw new Error("Plan already exists");
+        throw new AppError("Plan already exists");
     }
 
     const result = await createPlan({

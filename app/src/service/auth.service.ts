@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { createCompany, createUser, findUserByEmail, getUserByEmail } from "../repository/auth.repository";
 import { LoginRequest, LoginResponse, SignupRequest, SignupResponse } from "../interface/auth.interface";
 import { generateToken } from "../utils/auth.utils";
+import { AppError } from "../utils/AppError";
 
 export const signupService = async (data: SignupRequest): Promise<SignupResponse> => {
   const { company_name, email, password, phone, address } = data;
@@ -9,7 +10,7 @@ export const signupService = async (data: SignupRequest): Promise<SignupResponse
   // Check user exists
   const existingUser = await findUserByEmail(email);
   if (existingUser) {
-    throw new Error("User already exists");
+    throw new AppError("User already exists");
   }
 
   // Hash password
@@ -44,13 +45,13 @@ export const loginService = async (
   const user = await getUserByEmail(email);
 
   if (!user) {
-    throw new Error("Invalid email or password");
+    throw new AppError("Invalid email or password");
   }
 
   const isMatch = await bcrypt.compare(password, user.password_hash);
 
   if (!isMatch) {
-    throw new Error("Invalid email or password");
+    throw new AppError("Invalid email or password");
   }
 
   const token = generateToken({

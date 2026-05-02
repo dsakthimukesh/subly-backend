@@ -5,6 +5,7 @@ import {
     getPlansService,
 } from "../service/plans.service";
 import { CreatePlanRequest } from "../interface/plans.interface";
+import { AppError } from "../utils/AppError";
 
 export const createPlan = async (
     req: AuthRequest & { body: CreatePlanRequest },
@@ -27,6 +28,9 @@ export const createPlan = async (
 
         return res.status(200).json(result);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };
@@ -36,13 +40,16 @@ export const getPlans = async (req: AuthRequest, res: Response) => {
         const company_id = req.user?.company_id;
 
         if (!company_id) {
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(400).json({ message: "Unauthorized" });
         }
 
         const plans = await getPlansService(company_id);
 
         return res.status(200).json(plans);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };

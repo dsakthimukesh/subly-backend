@@ -4,6 +4,7 @@ import {
     createSubscriptionService,
     getSubscriptionsService,
 } from "../service/subscriptions.service";
+import { AppError } from "../utils/AppError";
 
 export const createSubscription = async (req: AuthRequest, res: Response) => {
     try {
@@ -23,6 +24,9 @@ export const createSubscription = async (req: AuthRequest, res: Response) => {
 
         return res.status(200).json(result);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };
@@ -35,6 +39,9 @@ export const getSubscriptions = async (req: AuthRequest, res: Response) => {
 
         return res.status(200).json(subs);
     } catch (error: any) {
+        if (error instanceof AppError) {
+            return res.status(error.statusCode).json({ message: error.message });
+        }
         return res.status(500).json({ message: error.message });
     }
 };
