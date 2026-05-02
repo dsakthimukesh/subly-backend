@@ -21,7 +21,7 @@ export const createSubscription = async (req: AuthRequest, res: Response) => {
 
         const result = await createSubscriptionService(company_id, req.body);
 
-        return res.status(201).json(result);
+        return res.status(200).json(result);
     } catch (error: any) {
         return res.status(500).json({ message: error.message });
     }

@@ -13,7 +13,7 @@ export const signup = async (req: Request, res: Response) => {
 
     const result = await signupService(req.body);
 
-    return res.status(201).json(result);
+    return res.status(200).json(result);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
@@ -34,6 +34,6 @@ export const login = async (
 
     return res.status(200).json(result);
   } catch (error: any) {
-    return res.status(401).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };

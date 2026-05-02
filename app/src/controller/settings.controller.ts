@@ -30,7 +30,7 @@ export const generateApiKey = async (req: AuthRequest, res: Response) => {
   try {
     const company_id = req.user?.company_id!;
     const result = await generateApiKeyService(company_id);
-    return res.status(201).json(result);
+    return res.status(200).json(result);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }
