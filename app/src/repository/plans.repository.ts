@@ -32,10 +32,12 @@ export const createPlan = async (data: any) => {
 // get plans
 export const getPlansByCompany = async (company_id: number) => {
     const result = await pool.query(
-        `SELECT plan_id, plan_name, price, billing_cycle_id, features
-     FROM subly.plans
-     WHERE company_id = $1
-     ORDER BY created_date DESC`,
+        `SELECT p.plan_id, p.plan_name, p.price, p.features,
+                bc.billing_cycle_name
+         FROM subly.plans p
+         LEFT JOIN subly.billing_cycles bc ON p.billing_cycle_id = bc.billing_cycle_id
+         WHERE p.company_id = $1
+         ORDER BY p.created_date DESC`,
         [company_id]
     );
 

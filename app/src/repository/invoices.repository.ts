@@ -3,10 +3,15 @@ import { pool } from "../config/db";
 // get invoices
 export const getInvoicesByCompany = async (company_id: number) => {
     const result = await pool.query(
-        `SELECT invoice_id, customer_id, subscription_id, amount, currency, due_date, status_id
-     FROM subly.invoices
-     WHERE company_id = $1
-     ORDER BY created_date DESC`,
+        `SELECT i.invoice_id,
+                c.customer_id, c.name AS customer_name,
+                i.subscription_id, i.amount, i.currency, i.due_date,
+                s.status_name
+         FROM subly.invoices i
+         LEFT JOIN subly.customers c ON i.customer_id = c.customer_id
+         LEFT JOIN subly.statuses s ON i.status_id = s.status_id
+         WHERE i.company_id = $1
+         ORDER BY i.created_date DESC`,
         [company_id]
     );
 

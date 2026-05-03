@@ -2,10 +2,12 @@ import { pool } from "../config/db";
 
 export const getCustomersByCompany = async (company_id: number) => {
   const result = await pool.query(
-    `SELECT customer_id, name, email, external_customer_id
-     FROM subly.customers
-     WHERE company_id = $1
-     ORDER BY created_date DESC`,
+    `SELECT c.customer_id, c.name, c.email, c.external_customer_id,
+            s.status_name
+     FROM subly.customers c
+     LEFT JOIN subly.statuses s ON c.status_id = s.status_id
+     WHERE c.company_id = $1
+     ORDER BY c.created_date DESC`,
     [company_id]
   );
 

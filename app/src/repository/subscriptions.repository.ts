@@ -72,10 +72,17 @@ export const createInvoice = async (data: any) => {
 // get subscriptions
 export const getSubscriptionsByCompany = async (company_id: number) => {
     const result = await pool.query(
-        `SELECT s.subscription_id, s.customer_id, s.plan_id, s.start_date, s.end_date, s.status_id
-     FROM subly.subscriptions s
-     WHERE s.company_id = $1
-     ORDER BY s.created_date DESC`,
+        `SELECT s.subscription_id,
+                c.customer_id, c.name AS customer_name,
+                p.plan_id, p.plan_name,
+                s.start_date, s.end_date,
+                st.status_name
+         FROM subly.subscriptions s
+         LEFT JOIN subly.customers c ON s.customer_id = c.customer_id
+         LEFT JOIN subly.plans p ON s.plan_id = p.plan_id
+         LEFT JOIN subly.statuses st ON s.status_id = st.status_id
+         WHERE s.company_id = $1
+         ORDER BY s.created_date DESC`,
         [company_id]
     );
 
