@@ -80,7 +80,7 @@ export const getSubscriptionsByCompany = async (company_id: number) => {
          FROM subly.subscriptions s
          LEFT JOIN subly.customers c ON s.customer_id = c.customer_id
          LEFT JOIN subly.plans p ON s.plan_id = p.plan_id
-         LEFT JOIN subly.statuses st ON s.status_id = st.status_id
+         LEFT JOIN subly.status st ON s.status_id = st.status_id
          WHERE s.company_id = $1
          ORDER BY s.created_date DESC`,
         [company_id]

@@ -9,7 +9,7 @@ export const getInvoicesByCompany = async (company_id: number) => {
                 s.status_name
          FROM subly.invoices i
          LEFT JOIN subly.customers c ON i.customer_id = c.customer_id
-         LEFT JOIN subly.statuses s ON i.status_id = s.status_id
+         LEFT JOIN subly.status s ON i.status_id = s.status_id
          WHERE i.company_id = $1
          ORDER BY i.created_date DESC`,
         [company_id]
