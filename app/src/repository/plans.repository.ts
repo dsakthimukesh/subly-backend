@@ -35,7 +35,7 @@ export const getPlansByCompany = async (company_id: number) => {
         `SELECT p.plan_id, p.plan_name, p.price, p.features,
                 bc.billing_cycle_name
          FROM subly.plans p
-         LEFT JOIN subly.billing_cycles bc ON p.billing_cycle_id = bc.billing_cycle_id
+         LEFT JOIN subly.billing_cycle bc ON p.billing_cycle_id = bc.billing_cycle_id
          WHERE p.company_id = $1
          ORDER BY p.created_date DESC`,
         [company_id]
